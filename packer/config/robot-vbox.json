@@ -49,6 +49,15 @@
         "type": "vagrant",
         "keep_input_artifact": false,
         "output": "box/centos_robot_{{ .Provider }}.box"
+      },
+      {
+      "type": "atlas",
+      "token": "{{ user `atlas_token` }}",
+      "artifact": "ejisfza/odl-centos7-robot",
+      "artifact_type": "vagrant.box",
+      "metadata": {
+        "provider": "virtualbox"
+        }
       }
     ]
   ]

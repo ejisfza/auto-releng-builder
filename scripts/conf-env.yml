@@ -4,8 +4,8 @@
       -
         name: "odl-1"
         ip: "10.29.13.101"
-        box_name: "centos_odl"
-        box_url: "file:///./packer/box/centos_odl_virtualbox.box"
+        box_name: "ejisfza/odl-centos7-java-builder"
+#        box_url: "file:///./packer/box/centos_odl_virtualbox.box"
         hostname: "centos7-java-builder"
         memory: 1024
         cpu_cores: 2
@@ -14,8 +14,8 @@
       -
         name: "robot-odl"
         ip: "10.29.13.102"
-        box_name: "centos_robot"
-        box_url: "file:///./packer/box/centos_robot_virtualbox.box"
+        box_name: "ejisfza/odl-centos7-robot"
+#        box_url: "file:///./packer/box/centos_robot_virtualbox.box"
         hostname: "centos7-robot"
         memory: 1024
         cpu_cores: 2
@@ -24,8 +24,8 @@
       -
         name: "docker-odl"
         ip: "10.29.13.103"
-        box_name: "centos_docker"
-        box_url: "file:///./packer/box/centos_docker_virtualbox.box"
+        box_name: "ejisfza/odl-centos7-docker"
+#        box_url: "file:///./packer/box/centos_docker_virtualbox.box"
         hostname: "centos7-docker"
         memory: 1024
         cpu_cores: 2

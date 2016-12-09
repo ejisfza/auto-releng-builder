@@ -18,7 +18,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
           config.ssh.password = "centos"
           config.vm.define servers["name"] do |srv|
               srv.vm.box = servers["box_name"]
-              srv.vm.box_url = servers["box_url"]
+#              srv.vm.box_url = servers["box_url"]
               srv.vm.hostname = servers["hostname"]
               srv.vm.network "private_network", ip: servers["ip"]
               srv.vm.provider :virtualbox do |vb|
