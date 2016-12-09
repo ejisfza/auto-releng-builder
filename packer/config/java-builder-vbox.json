@@ -48,6 +48,15 @@
         "type": "vagrant",
         "keep_input_artifact": false,
         "output": "box/centos_odl_{{ .Provider }}.box"
+      },
+      {
+      "type": "atlas",
+      "token": "{{ user `atlas_token` }}",
+      "artifact": "ejisfza/odl-centos7-java-builder",
+      "artifact_type": "vagrant.box",
+      "metadata": {
+        "provider": "virtualbox"
+        }
       }
     ]
   ]
