@@ -47,4 +47,7 @@ make &> /dev/null && cp udpreplay /usr/local/bin
 yum install -y -q firefox xorg-x11-server-Xvfb
 
 # Install yaml library to load environment configuration
-pip install pyyaml
+pip install -y pyyaml
+
+# Install sshpass to enable passwordless copy of ssh keys
+pip install -y sshpass
