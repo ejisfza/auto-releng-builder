@@ -15,7 +15,7 @@ class VirtualEnv:
         self.job_template_yaml="integration-templates.yaml"
         self.job_macros_yaml="integration-macros.yaml"
         if self.env.get("log"):
-            self.log = open(self.env["log"], 'w+')
+            self.log = open(self.env["log"], 'w')
         else:
             self.log = None
         
@@ -33,6 +33,8 @@ class VirtualEnv:
         if type(macro) == dict:
             for script in macro["include-raw"]:
                 if os.path.isfile(self.script_dir+script):
+                    # Add executable rights
+                    os.chmod(self.script_dir + script, 0774)
                     print("############ Executing script %s ################" % script) 
                     if self.log:
                         rc = subprocess.call(self.script_dir + script,shell=True, stdout=self.log, stderr=subprocess.PIPE)
@@ -45,8 +47,12 @@ class VirtualEnv:
         else:
             # Script hardcoded in the yaml
             # Put text script into a script file
+            if not self.env.get("env_var") and not self.env["env_var"].get("SSHPASS"):
+                raise Exception("Environment variables section or SSHPASS env not set in yaml config")
+            
             script_name = "/tmp/" + builder_name + ".sh"
             with open(script_name, "w+") as script_file:
+                macro = macro.replace("ssh-copy-id", "sshpass -e ssh-copy-id")
                 script_file.write(macro)
             # Add executable rights
             os.chmod(script_name, 0744)
@@ -85,11 +91,12 @@ class VirtualEnv:
             
     def inject_env_vars(self, env_file):
     
-        if not self.env.get("env") and not self.env["env"].get("WORKSPACE"):
+        if not self.env.get("env_var") and not self.env["env_var"].get("WORKSPACE"):
             raise Exception("Environment variables section or WORKSPACE env not set in yaml config")
         
-        loc = self.env["env"]["WORKSPACE"] + "env_file"
-        if not os.exists(loc):
+        # Env vars file location to inject
+        loc = self.env["env_var"]["WORKSPACE"] + "/" + env_file
+        if not os.path.exists(loc):
             raise IOError("File %s not found" % loc)
             
         with open(loc, "r") as file:

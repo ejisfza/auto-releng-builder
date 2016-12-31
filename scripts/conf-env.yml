@@ -11,6 +11,7 @@
         cpu_cores: 2
         provision:
              - "/builder/jenkins-scripts/jenkins-init-script.sh"
+             - "/scripts/config_ssh.sh"
       -
         name: "robot-odl"
         ip: "10.29.13.102"
@@ -21,6 +22,7 @@
         cpu_cores: 2
         provision:
              - "/builder/jenkins-scripts/jenkins-init-script.sh"
+             - "/scripts/config_ssh.sh"
       -
         name: "docker-odl"
         ip: "10.29.13.103"
@@ -31,6 +33,7 @@
         cpu_cores: 2
         provision:
              - "/builder/jenkins-scripts/jenkins-init-script.sh"
+             - "/scripts/config_ssh.sh"
   env_var:
       PROJECT: "integration/test"
       ARCHIVE_ARTIFCATS: "**/target/surefire-reports/*-output.txt"
@@ -47,8 +50,9 @@
       TESTPLAN: "sfc-full-deploy.txt"
       PATCHREFSPEC: "master"
       JDKVERSION: "openjdk8"
-      WORKSPACE: "~/workspace"
+      WORKSPACE: "/w/workspace"
       JCLOUDS_IPS: "10.29.13.101,10.29.13.103"
+      SSHPASS: "jenkins"
   job_template: '{project}-csit-3node-docker-{functionality}-{install}-{stream}'
   log: "/tmp/config_env.log"
         
