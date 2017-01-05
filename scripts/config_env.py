@@ -19,6 +19,17 @@ class VirtualEnv:
         else:
             self.log = None
         
+        if not self.env.get("env_var") and not self.env["env_var"].get("WORKSPACE"):
+            raise Exception("Environment variables section or WORKSPACE env not set in yaml config")
+        else:
+            # Prepare workspace and jump into it
+            workspace = self.env["env_var"]["WORKSPACE"]
+            if os.path.isdir(workspace) and os.path.exists(workspace):
+                os.chdir(workspace)
+            else:
+                os.makedirs(workspace)
+                os.chdir(workspace) 
+
     def load_env_vars(self):
         
         for env_var_name in self.env["env_var"]:
@@ -102,7 +113,7 @@ class VirtualEnv:
         with open(loc, "r") as file:
             for line in file.readlines():
                 fields = line.split("=")
-                os.environ[fields[0]] = fields[1]
+                os.environ[fields[0]] = fields[1].rstrip()
             
     
     def execute_bash_scripts(self, builders):
