@@ -1,0 +1,57 @@
+-
+  name: my_env
+  topology:
+      -
+        name: "odl-1"
+        ip: "10.29.13.101"
+        box_name: "ejisfza/odl-centos7-java-builder"
+        hostname: "centos7-java-builder"
+        memory: 1024
+        cpu_cores: 2
+        provision:
+             - "/builder/jenkins-scripts/jenkins-init-script.sh"
+             - "/scripts/config_ssh.sh"
+      -
+        name: "robot-odl"
+        ip: "10.29.13.102"
+        box_name: "ejisfza/odl-centos7-robot"
+        hostname: "centos7-robot"
+        memory: 1024
+        cpu_cores: 2
+        provision:
+             - "/builder/jenkins-scripts/jenkins-init-script.sh"
+             - "/scripts/config_ssh.sh"
+      -
+        name: "docker-odl"
+        ip: "10.29.13.103"
+        box_name: "ejisfza/odl-centos7-docker"
+        hostname: "centos7-docker"
+        memory: 1024
+        cpu_cores: 2
+        provision:
+             - "/builder/jenkins-scripts/jenkins-init-script.sh"
+             - "/scripts/config_ssh.sh"
+  pre_conf:
+    - "/scripts/preconf_robot.sh"
+  env_var:
+      PROJECT: "integration/test"
+      ARCHIVE_ARTIFCATS: "**/target/surefire-reports/*-output.txt"
+      GERRIT_PROJECT: "integration/test"
+      GERRIT_BRANCH: "master"
+      GERRIT_SPECIFIC: "refs/heads/master"
+      BRANCH: "master"
+      DISTROSTREAM: "carbon"
+      BUNDLEURL: "last"
+      CONTROLLERSCOPE: "only"
+      CONTROLLERFEATURES: "odl-jolokia,odl-sfc-provider,odl-sfc-ui,odl-sfc-openflow-renderer,odl-sfc-scf-openflow,odl-sfc-sb-rest,odl-sfc-ovs,odl-sfc-netconf"
+      TESTOPTIONS: ""
+      STREAMTESTPLAN: "sfc-full-deploy-carbon.txt"
+      TESTPLAN: "sfc-full-deploy.txt"
+      PATCHREFSPEC: "master"
+      JDKVERSION: "openjdk8"
+      WORKSPACE: "/w/workspace"
+      JCLOUDS_IPS: "10.29.13.101,10.29.13.103"
+      SSHPASS: "jenkins"
+  job_template: '{project}-csit-3node-docker-{functionality}-{install}-{stream}'
+  log: "/tmp/config_env.log"
+        

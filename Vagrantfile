@@ -4,7 +4,7 @@ VAGRANTFILE_API_VERSION = "2"
 require 'yaml'
 
 # Read file yaml with configuration
-environment = YAML.load_file("scripts/conf-env.yml")
+environment = YAML.load_file("scripts/test_conf_1odl.yml")
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
