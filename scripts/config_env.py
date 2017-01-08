@@ -38,43 +38,46 @@ class VirtualEnv:
     def print_env_vars(self):
         for env_var_name in self.env["env_var"]:
             print("%s = %s" %(env_var_name,os.environ[env_var_name]))
+
+    def run_script(self, script_loc, print_text):
+
+        if os.path.isfile(script_loc):
+            # Add executable rights
+            os.chmod(script_loc, 0774)
+            # Get file name
+            script_name = os.path.basename(script_loc)
+            print("############ %s %s ################" % (print_text, script_name)) 
+            if self.log:
+                rc = subprocess.call(script_loc,shell=True, stdout=self.log, stderr=subprocess.PIPE)
+            else:
+                rc = subprocess.call(script_loc,shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+            if rc:
+                raise Exception("Something went wrong during the execution of %s script" % script_name)
+        else:
+            raise IOError("File %s not found" % script_loc)
     
+    def pre_configure_env(self):
+    
+        if self.env.get("pre_conf"):
+            for pre_conf_script in self.env["pre_conf"]:
+                self.run_script(pre_conf_script, "Pre-configure environment with script")
+
     def run_macro(self,macro, builder_name):
     
         if type(macro) == dict:
             for script in macro["include-raw"]:
-                if os.path.isfile(self.script_dir+script):
-                    # Add executable rights
-                    os.chmod(self.script_dir + script, 0774)
-                    print("############ Executing script %s ################" % script) 
-                    if self.log:
-                        rc = subprocess.call(self.script_dir + script,shell=True, stdout=self.log, stderr=subprocess.PIPE)
-                    else:
-                        rc = subprocess.call(self.script_dir + script,shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-                    if rc:
-                        raise Exception("Something went wrong during the execution of %s script" % script)
-                else:
-                    raise IOError("File %s not found" % script)
+                self.run_script(self.script_dir+script, "Executing script")
         else:
             # Script hardcoded in the yaml
             # Put text script into a script file
             if not self.env.get("env_var") and not self.env["env_var"].get("SSHPASS"):
                 raise Exception("Environment variables section or SSHPASS env not set in yaml config")
             
-            script_name = "/tmp/" + builder_name + ".sh"
-            with open(script_name, "w+") as script_file:
+            hard_script = "/tmp/" + builder_name + ".sh"
+            with open(hard_script, "w+") as hard_script_file:
                 macro = macro.replace("ssh-copy-id", "sshpass -e ssh-copy-id")
-                script_file.write(macro)
-            # Add executable rights
-            os.chmod(script_name, 0744)
-            print("############ Executing hardcoded script %s ################" % script_name) 
-            
-            if self.log:
-                rc = subprocess.call(script_name, shell=True, stdout=self.log, executable='/bin/bash')
-            else:
-                rc = subprocess.call(script_name, shell=True, executable='/bin/bash')
-            if rc:
-                raise Exception("Something went wrong during the execution of the script")
+                hard_script_file.write(macro)
+            self.run_script(hard_script, "Executing hardcoded script")
            
     def find_macro(self,builder_name):    
         macros_file = open(self.script_dir+self.job_macros_yaml, "r+").read()
@@ -128,6 +131,7 @@ class VirtualEnv:
         self.load_env_vars()
         # Debugging
         self.print_env_vars()
+        self.pre_configure_env()
         jenkins_template = yaml.load(open(self.script_dir+self.job_template_yaml))
   
         job = [x for x in jenkins_template if x["job-template"]["name"] == self.env["job_template"]]
