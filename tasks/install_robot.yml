@@ -1,0 +1,123 @@
+---
+- hosts: 127.0.0.1
+  connection: local
+  vars:
+    - workspace: 
+  tasks:
+    - name: Set Virtual Env Directory
+      command: mktemp -d --suffix=robot_venv
+      register: robot_venv
+ 
+    - name: Upgrade pip
+      pip: 
+           name: pip
+           state: latest
+           virtualenv: "{{ robot_venv.stdout }}"
+
+    - name: Install Docker-py
+      pip: 
+           name: docker-py
+           state: latest
+           virtualenv: "{{ robot_venv.stdout }}"
+
+    - name: Install importlib
+      pip: 
+           name: importlib
+           state: latest
+           virtualenv: "{{ robot_venv.stdout }}"
+
+    - name: Install requests
+      pip: 
+           name: requests
+           state: latest
+           virtualenv: "{{ robot_venv.stdout }}"
+
+    - name: Install scapy
+      pip: 
+           name: scapy
+           state: latest
+           virtualenv: "{{ robot_venv.stdout }}"
+
+    - name: Install netifaces
+      pip: 
+           name: netifaces
+           state: latest
+           virtualenv: "{{ robot_venv.stdout }}"
+
+    - name: Install netaddr
+      pip: 
+           name: netaddr
+           state: latest
+           virtualenv: "{{ robot_venv.stdout }}"
+
+    - name: Install ipaddr
+      pip: 
+           name: ipaddr
+           state: latest
+           virtualenv: "{{ robot_venv.stdout }}"
+
+    - name: Install pyhocon
+      pip: 
+           name: requests
+           state: latest
+           virtualenv: "{{ robot_venv.stdout }}"
+
+    - name: Install robotframework-httplibrary
+      pip: 
+           name: robotframework-httplibrary
+           state: latest
+           virtualenv: "{{ robot_venv.stdout }}"
+
+    - name: Install robotframework-requests
+      pip: 
+           name: robotframework-requests
+           state: latest
+           virtualenv: "{{ robot_venv.stdout }}"
+
+    - name: Install robotframework-sshlibrary
+      pip: 
+           name: robotframework-sshlibrary
+           state: latest
+           virtualenv: "{{ robot_venv.stdout }}"
+
+    - name: Install robotframework-selenium2library
+      pip: 
+           name: robotframework-selenium2library
+           state: latest
+           virtualenv: "{{ robot_venv.stdout }}"
+
+    - name: Install robotframework-pycurllibrary
+      pip: 
+           name: robotframework-pycurllibrary
+           state: latest
+           virtualenv: "{{ robot_venv.stdout }}"
+
+    - name: Install jsonpath-rw
+      pip: 
+           name: jsonpath-rw
+           state: latest
+           virtualenv: "{{ robot_venv.stdout }}"
+
+    - name: Install elasticsearch
+      pip: 
+           name: elasticsearch
+           state: latest
+           virtualenv: "{{ robot_venv.stdout }}"
+
+    - name: Install elasticsearch-dsl
+      pip: 
+           name: elasticsearch-dsl
+           state: latest
+           virtualenv: "{{ robot_venv.stdout }}"
+
+    - name: Install pyangbind
+      pip: 
+           name: pyangbind
+           state: latest
+           virtualenv: "{{ robot_venv.stdout }}"
+
+    - name: Install isodate
+      pip: 
+           name: isodate
+           state: latest
+           virtualenv: "{{ robot_venv.stdout }}"
